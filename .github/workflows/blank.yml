@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>填空遊戲</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .option {
+            width: 60px;
+            height: 60px;
+            margin: 5px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            text-align: center;
+            line-height: 60px;
+            cursor: pointer;
+        }
+
+        .blank {
+            width: 176px;
+            height: 286px;
+            margin: 5px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            text-align: center;
+            line-height: 60px;
+            cursor: pointer;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px;
+        }
+
+        #score {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="options-container">
+        <div class="blank" onclick="clearBlank()"></div>
+        <div class="blank" onclick="clearBlank()"></div>
+        <div class="blank" onclick="clearBlank()"></div>
+        <div class="blank" onclick="clearBlank()"></div>
+        <div class="blank" onclick="clearBlank()"></div>
+        <div class="blank" onclick="clearBlank()"></div>
+        <div class="blank" onclick="clearBlank()"></div>
+        <div class="blank" onclick="clearBlank()"></div>
+        <div class="blank" onclick="clearBlank()"></div>
+        <div class="blank" onclick="clearBlank()"></div>
+        <div class="blank" onclick="clearBlank()"></div>
+        <div class="blank" onclick="clearBlank()"></div>
+        <div class="blank" onclick="clearBlank()"></div>
+        <div class="blank" onclick="clearBlank()"></div>
+        <div class="blank" onclick="clearBlank()"></div>
+        <div class="blank" onclick="clearBlank()"></div>
+        <!-- 在此繼續添加所有16個空白的div -->
+    </div>
+
+    <div class="options-container">
+        <div class="option" data-value="a1" onclick="fillBlank('file:///C:/Users/leund011/Desktop/mj%20photo/1k.jfif')">
+            選項1</div>
+        <div class="option" data-value="a2" onclick="fillBlank('file:///C:/Users/leund011/Desktop/mj%20photo/2k.jfif')">
+            選項2</div>
+        <div class="option" onclick="fillBlank('選項3')">選項3</div>
+        <div class="option" onclick="fillBlank('選項4')">選項4</div>
+        <div class="option" onclick="fillBlank('選項5')">選項5</div>
+        <div class="option" onclick="fillBlank('選項6')">選項6</div>
+        <div class="option" onclick="fillBlank('選項7')">選項7</div>
+        <div class="option" onclick="fillBlank('選項8')">選項8</div>
+        <div class="option" onclick="fillBlank('選項9')">選項9</div>
+        <div class="option" onclick="fillBlank('選項10')">選項10</div>
+        <div class="option" onclick="fillBlank('選項11')">選項11</div>
+        <div class="option" onclick="fillBlank('選項12')">選項12</div>
+        <div class="option" onclick="fillBlank('選項13')">選項13</div>
+        <div class="option" onclick="fillBlank('選項14')">選項14</div>
+        <div class="option" onclick="fillBlank('選項15')">選項15</div>
+        <div class="option" onclick="fillBlank('選項16')">選項16</div>
+        <div class="option" onclick="fillBlank('選項17')">選項17</div>
+        <div class="option" onclick="fillBlank('選項15')">選項18</div>
+        <div class="option" onclick="fillBlank('選項15')">選項19</div>
+        <div class="option" onclick="fillBlank('選項15')">選項20</div>
+        <div class="option" onclick="fillBlank('選項15')">選項21</div>
+        <div class="option" onclick="fillBlank('選項15')">選項22</div>
+        <div class="option" onclick="fillBlank('選項15')">選項23</div>
+        <div class="option" onclick="fillBlank('選項15')">選項24</div>
+        <div class="option" onclick="fillBlank('選項15')">選項25</div>
+        <div class="option" onclick="fillBlank('選項15')">選項26</div>
+        <div class="option" onclick="fillBlank('選項15')">選項27</div>
+        <div class="option" onclick="fillBlank('選項15')">選項28</div>
+        <div class="option" onclick="fillBlank('選項15')">選項29</div>
+        <div class="option" onclick="fillBlank('選項15')">選項30</div>
+        <div class="option" onclick="fillBlank('選項15')">選項31</div>
+        <div class="option" onclick="fillBlank('選項15')">選項32</div>
+        <div class="option" onclick="fillBlank('選項15')">選項33</div>
+        <div class="option" onclick="fillBlank('選項15')">選項34</div>
+        <div class="option" onclick="fillBlank('選項15')">選項35</div>
+        <div class="option" onclick="fillBlank('選項15')">選項36</div>
+        <div class="option" onclick="fillBlank('選項15')">選項37</div>
+        <div class="option" onclick="fillBlank('選項15')">選項38</div>
+        <div class="option" onclick="fillBlank('選項15')">選項39</div>
+        <div class="option" onclick="fillBlank('選項15')">選項40</div>
+        <div class="option" onclick="fillBlank('選項15')">選項41</div>
+        <div class="option" onclick="fillBlank('選項15')">選項42</div>
+        <!-- 在此繼續添加所有42個選項的div -->
+    </div>
+
+    <div id="score">番數: 0</div>
+    <button onclick="submitAnswers()">提交答案</button>
+    <button onclick="clearSelectedOptions()">重來</button>
+
+    <script>
+
+        var score = 0;
+        var filledValues = [];
+
+        function submitAnswers() {
+            var blanks = document.getElementsByClassName("blank");
+            var filledBlanks = Array.from(blanks).filter(blank => blank.querySelector('img') !== null || blank.textContent.trim() !== "");
+
+            var filledValues = filledBlanks.map(blank => blank.textContent.trim());
+            if (checkAllFilled(filledValues)) {
+                var score = calculateScore(filledValues);
+                document.getElementById("score").textContent = "Score: " + score;
+            } else {
+                alert("Please fill all blanks before submitting.");
+            }
+        }
+
+        function fillBlank(option) {
+            var blanks = document.getElementsByClassName("blank");
+            for (var i = 0; i < blanks.length; i++) {
+                if (blanks[i].textContent === "" && blanks[i].querySelector('img') === null) {
+                    if (option.startsWith("file:///")) {
+                        blanks[i].innerHTML = '<img src="' + option + '" alt="圖片">';
+                    } else {
+                        blanks[i].textContent = option;
+                    }
+
+                    filledValues.push(option);
+                    if (checkScoringConditions(filledValues)) {
+                        score += 5;
+                        document.getElementById("score").textContent = "Score: " + score;
+                    }
+                    break;
+                }
+            }
+        }
+        function clearBlank() {
+            var blanks = document.getElementsByClassName("blank");
+            for (var i = 0; i < blanks.length; i++) {
+                blanks[i].textContent = "";
+            }
+        }
+
+        function clearSelectedOptions() {
+            var blanks = document.getElementsByClassName("blank");
+            for (var i = 0; i < blanks.length; i++) {
+                blanks[i].textContent = "";
+            }
+        };
+
+        function checkScoringConditions(values) {
+            // Check if there are 3 occurrences of 'a1' and 3 occurrences of 'a2' or their adjacent values
+            var a1Count = values.filter(value => value.includes("a1")).length;
+            var a2Count = values.filter(value => value.includes("a2")).length;
+
+            if ((a1Count >= 3 && a2Count >= 2) || (a1Count >= 2 && a2Count >= 3)) {
+                return true;
+            }
+
+            return false;
+        }
+
+    </script>
+</body>
+
+</html>
