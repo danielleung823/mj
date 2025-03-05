@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <title>港式台牌聽牌計算器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .tile {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            transition: transform 0.2s;
+            position: relative;
+        }
+        .tile:hover {
+            transform: scale(1.1);
+        }
+        .selected {
+            border: 2px solid #ff0000;
+        }
+        .count-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            font-size: 12px;
+        }
+        .tiles-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        #fixed-tiles-container, #hand-tiles-container {
+            border: 2px dashed #666;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        #fixed-tiles-container {
+            background-color: #ffe6e6;
+        }
+        #hand-tiles-container {
+            background-color: #e6ffe6;
+        }
+        #fixed-area, #hand-area {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        #fixed-area h3, #hand-area h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        #fixed-tiles, #hand-tiles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            justify-content: center;
+            min-height: 50px;
+            align-items: center;
+        }
+        #fixed-tiles .fixed-tile, #hand-tiles .hand-tile {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #999;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        #fixed-tiles .fixed-tile:hover, #hand-tiles .hand-tile:hover {
+            background-color: #ffcccc;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 5px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>港式台牌聽牌計算器</h1>
+        <p>點擊下方區域的牌放入「已固定的牌」或「你的手牌」 (最多16張，每張最多4次):</p>
+        
+        <div id="fixed-tiles-container">
+            <h3>點擊這裡放入已固定的牌</h3>
+            <div class="tiles-container" id="fixed-tiles-input">
+                <!-- 萬子 -->
+                <div class="tile-wrapper"><div class="tile" data-value="1w">1萬</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="2w">2萬</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="3w">3萬</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="4w">4萬</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="5w">5萬</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="6w">6萬</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="7w">7萬</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="8w">8萬</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="9w">9萬</div><span class="count-badge" data-count="0"></span></div>
+                <!-- 筒子 -->
+                <div class="tile-wrapper"><div class="tile" data-value="1t">1筒</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="2t">2筒</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="3t">3筒</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="4t">4筒</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="5t">5筒</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="6t">6筒</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="7t">7筒</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="8t">8筒</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="9t">9筒</div><span class="count-badge" data-count="0"></span></div>
+                <!-- 條子 -->
+                <div class="tile-wrapper"><div class="tile" data-value="1b">1條</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="2b">2條</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="3b">3條</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="4b">4條</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="5b">5條</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="6b">6條</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="7b">7條</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="8b">8條</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="9b">9條</div><span class="count-badge" data-count="0"></span></div>
+                <!-- 字牌 -->
+                <div class="tile-wrapper"><div class="tile" data-value="east">東</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="south">南</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="west">西</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="north">北</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="red">中</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="green">發</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="white">白</div><span class="count-badge" data-count="0"></span></div>
+                <!-- 百搭 -->
+                <div class="tile-wrapper"><div class="tile" data-value="joker">百搭</div><span class="count-badge" data-count="0"></span></div>
+            </div>
+        </div>
+
+        <div id="hand-tiles-container">
+            <h3>點擊這裡放入手牌</h3>
+            <div class="tiles-container" id="hand-tiles-input">
+                <!-- 萬子 -->
+                <div class="tile-wrapper"><div class="tile" data-value="1w">1萬</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="2w">2萬</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="3w">3萬</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="4w">4萬</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="5w">5萬</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="6w">6萬</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="7w">7萬</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="8w">8萬</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="9w">9萬</div><span class="count-badge" data-count="0"></span></div>
+                <!-- 筒子 -->
+                <div class="tile-wrapper"><div class="tile" data-value="1t">1筒</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="2t">2筒</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="3t">3筒</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="4t">4筒</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="5t">5筒</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="6t">6筒</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="7t">7筒</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="8t">8筒</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="9t">9筒</div><span class="count-badge" data-count="0"></span></div>
+                <!-- 條子 -->
+                <div class="tile-wrapper"><div class="tile" data-value="1b">1條</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="2b">2條</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="3b">3條</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="4b">4條</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="5b">5條</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="6b">6條</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="7b">7條</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="8b">8條</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="9b">9條</div><span class="count-badge" data-count="0"></span></div>
+                <!-- 字牌 -->
+                <div class="tile-wrapper"><div class="tile" data-value="east">東</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="south">南</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="west">西</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="north">北</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="red">中</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="green">發</div><span class="count-badge" data-count="0"></span></div>
+                <div class="tile-wrapper"><div class="tile" data-value="white">白</div><span class="count-badge" data-count="0"></span></div>
+                <!-- 百搭 -->
+                <div class="tile-wrapper"><div class="tile" data-value="joker">百搭</div><span class="count-badge" data-count="0"></span></div>
+            </div>
+        </div>
+        
+        <div id="fixed-area">
+            <h3>已固定的牌 (已選: <span id="fixed-count">0</span> 張)</h3>
+            <div id="fixed-tiles"></div>
+        </div>
+        
+        <div id="hand-area">
+            <h3>你的手牌 (已選: <span id="hand-count">0</span> 張)</h3>
+            <div id="hand-tiles"></div>
+        </div>
+        
+        <button onclick="calculateTing()">計算聽什麼牌</button>
+        <button onclick="resetTiles()">重置</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        let fixedTiles = {}; // 已固定的牌（碰或上）
+        let handTiles = {};  // 手牌
+        const maxTiles = 16;
+        const maxPerTile = 4;
+
+        const tileNames = {
+            '1w': '1萬', '2w': '2萬', '3w': '3萬', '4w': '4萬', '5w': '5萬', '6w': '6萬', '7w': '7萬', '8w': '8萬', '9w': '9萬',
+            '1t': '1筒', '2t': '2筒', '3t': '3筒', '4t': '4筒', '5t': '5筒', '6t': '6筒', '7t': '7筒', '8t': '8筒', '9t': '9筒',
+            '1b': '1條', '2b': '2條', '3b': '3條', '4b': '4條', '5b': '5條', '6b': '6條', '7b': '7條', '8b': '8條', '9b': '9條',
+            'east': '東', 'south': '南', 'west': '西', 'north': '北', 'red': '中', 'green': '發', 'white': '白', 'joker': '百搭'
+        };
+
+        // 固定牌選擇區的事件綁定
+        document.querySelectorAll('#fixed-tiles-input .tile').forEach(tile => {
+            tile.addEventListener('click', function() {
+                const value = this.dataset.value;
+                const totalFixed = Object.values(fixedTiles).reduce((sum, count) => sum + count, 0);
+                const totalHand = Object.values(handTiles).reduce((sum, count) => sum + count, 0);
+                const totalSelected = totalFixed + totalHand;
+
+                if (totalSelected >= maxTiles) {
+                    console.log('已達16張上限，無法再選牌');
+                    return;
+                }
+
+                const fixedCount = fixedTiles[value] || 0;
+                const handCount = handTiles[value] || 0;
+                if (fixedCount + handCount >= maxPerTile) {
+                    console.log(`${tileNames[value]} 已選4次，無法再選`);
+                    return;
+                }
+
+                if (!fixedTiles[value]) fixedTiles[value] = 0;
+                fixedTiles[value]++;
+                this.classList.add('selected');
+                updateTileCount(this, fixedTiles[value] + handCount);
+                updateFixedTiles();
+                console.log(`放入固定牌: ${tileNames[value]}, 總數: ${totalSelected + 1}`);
+            });
+        });
+
+        // 手牌選擇區的事件綁定
+        document.querySelectorAll('#hand-tiles-input .tile').forEach(tile => {
+            tile.addEventListener('click', function() {
+                const value = this.dataset.value;
+                const totalFixed = Object.values(fixedTiles).reduce((sum, count) => sum + count, 0);
+                const totalHand = Object.values(handTiles).reduce((sum, count) => sum + count, 0);
+                const totalSelected = totalFixed + totalHand;
+
+                if (totalSelected >= maxTiles) {
+                    console.log('已達16張上限，無法再選牌');
+                    return;
+                }
+
+                const fixedCount = fixedTiles[value] || 0;
+                const handCount = handTiles[value] || 0;
+                if (fixedCount + handCount >= maxPerTile) {
+                    console.log(`${tileNames[value]} 已選4次，無法再選`);
+                    return;
+                }
+
+                if (!handTiles[value]) handTiles[value] = 0;
+                handTiles[value]++;
+                this.classList.add('selected');
+                updateTileCount(this, fixedCount + handTiles[value]);
+                updateHandTiles();
+                console.log(`放入手牌: ${tileNames[value]}, 總數: ${totalSelected + 1}`);
+            });
+        });
+
+        function updateTileCount(tile, count) {
+            const badge = tile.nextElementSibling;
+            badge.textContent = count > 0 ? count : '';
+            badge.dataset.count = count;
+        }
+
+        function updateFixedTiles() {
+            const totalFixed = Object.values(fixedTiles).reduce((sum, count) => sum + count, 0);
+            document.getElementById('fixed-count').textContent = totalFixed;
+
+            const fixedTilesDiv = document.getElementById('fixed-tiles');
+            fixedTilesDiv.innerHTML = '';
+
+            for (let [tile, count] of Object.entries(fixedTiles)) {
+                for (let i = 0; i < count; i++) {
+                    const tileDiv = document.createElement('div');
+                    tileDiv.className = 'fixed-tile';
+                    tileDiv.textContent = tileNames[tile];
+                    tileDiv.dataset.value = tile;
+                    tileDiv.addEventListener('click', function() {
+                        fixedTiles[tile]--;
+                        if (fixedTiles[tile] === 0) delete fixedTiles[tile];
+                        const fixedInputTile = document.querySelector(`#fixed-tiles-input .tile[data-value="${tile}"]`);
+                        const handInputTile = document.querySelector(`#hand-tiles-input .tile[data-value="${tile}"]`);
+                        const handCount = handTiles[tile] || 0;
+                        const fixedCount = fixedTiles[tile] || 0;
+                        if (fixedInputTile) updateTileCount(fixedInputTile, fixedCount + handCount);
+                        if (handInputTile) updateTileCount(handInputTile, fixedCount + handCount);
+                        if (fixedCount + handCount === 0) {
+                            if (fixedInputTile) fixedInputTile.classList.remove('selected');
+                            if (handInputTile) handInputTile.classList.remove('selected');
+                        }
+                        updateFixedTiles();
+                        console.log(`移除固定牌: ${tileNames[tile]}`);
+                    });
+                    fixedTilesDiv.appendChild(tileDiv);
+                }
+            }
+
+            if (totalFixed === 0) {
+                fixedTilesDiv.innerHTML = '<p>無已固定的牌</p>';
+            }
+        }
+
+        function updateHandTiles() {
+            const totalHand = Object.values(handTiles).reduce((sum, count) => sum + count, 0);
+            document.getElementById('hand-count').textContent = totalHand;
+
+            const handTilesDiv = document.getElementById('hand-tiles');
+            handTilesDiv.innerHTML = '';
+
+            for (let [tile, count] of Object.entries(handTiles)) {
+                for (let i = 0; i < count; i++) {
+                    const tileDiv = document.createElement('div');
+                    tileDiv.className = 'hand-tile';
+                    tileDiv.textContent = tileNames[tile];
+                    tileDiv.dataset.value = tile;
+                    tileDiv.addEventListener('click', function() {
+                        handTiles[tile]--;
+                        if (handTiles[tile] === 0) delete handTiles[tile];
+                        const fixedInputTile = document.querySelector(`#fixed-tiles-input .tile[data-value="${tile}"]`);
+                        const handInputTile = document.querySelector(`#hand-tiles-input .tile[data-value="${tile}"]`);
+                        const fixedCount = fixedTiles[tile] || 0;
+                        const handCount = handTiles[tile] || 0;
+                        if (fixedInputTile) updateTileCount(fixedInputTile, fixedCount + handCount);
+                        if (handInputTile) updateTileCount(handInputTile, fixedCount + handCount);
+                        if (fixedCount + handCount === 0) {
+                            if (fixedInputTile) fixedInputTile.classList.remove('selected');
+                            if (handInputTile) handInputTile.classList.remove('selected');
+                        }
+                        updateHandTiles();
+                        console.log(`移除手牌: ${tileNames[tile]}`);
+                    });
+                    handTilesDiv.appendChild(tileDiv);
+                }
+            }
+
+            if (totalHand === 0) {
+                handTilesDiv.innerHTML = '<p>尚未選擇任何手牌</p>';
+            }
+        }
+
+        function resetTiles() {
+            fixedTiles = {};
+            handTiles = {};
+            document.querySelectorAll('.tile').forEach(tile => {
+                tile.classList.remove('selected');
+                updateTileCount(tile, 0);
+            });
+            updateFixedTiles();
+            updateHandTiles();
+            document.getElementById('result').innerHTML = '';
+            console.log('牌已重置');
+        }
+
+        function calculateTing() {
+            const totalFixed = Object.values(fixedTiles).reduce((sum, count) => sum + count, 0);
+            const totalHand = Object.values(handTiles).reduce((sum, count) => sum + count, 0);
+            const totalSelected = totalFixed + totalHand;
+
+            if (totalSelected !== 16) {
+                document.getElementById('result').innerHTML = '台灣麻將需正好16張牌才能計算聽牌！';
+                return;
+            }
+
+            let fixed = [];
+            for (let [tile, count] of Object.entries(fixedTiles)) {
+                for (let i = 0; i < count; i++) {
+                    fixed.push(tile);
+                }
+            }
+
+            let hand = [];
+            for (let [tile, count] of Object.entries(handTiles)) {
+                for (let i = 0; i < count; i++) {
+                    hand.push(tile);
+                }
+            }
+
+            const jokers = handTiles['joker'] || 0;
+            let tingResult = findTingTiles(fixed, hand, jokers);
+
+            let resultText = '已固定的牌: ' + (Object.entries(fixedTiles)
+                .filter(([_, count]) => count > 0)
+                .map(([tile, count]) => `${tileNames[tile]} x${count}`)
+                .join(', ') || '無') + 
+                '<br>你的手牌: ' + Object.entries(handTiles)
+                .filter(([_, count]) => count > 0)
+                .map(([tile, count]) => `${tileNames[tile]} x${count}`)
+                .join(', ') + 
+                '<br>聽牌: ';
+            
+            if (tingResult.isAny) {
+                resultText += '任意牌';
+            } else if (tingResult.tiles.size > 0) {
+                resultText += Array.from(tingResult.tiles).map(tile => tileNames[tile]).join(', ');
+            } else {
+                resultText += '無聽牌';
+            }
+
+            document.getElementById('result').innerHTML = resultText;
+            console.log('計算完成', { fixedTiles, handTiles, tingResult });
+        }
+
+        function findTingTiles(fixed, hand, jokers) {
+            let tingTiles = new Set();
+            let suits = ['w', 't', 'b'];
+            let honors = ['east', 'south', 'west', 'north', 'red', 'green', 'white'];
+
+            let handCounts = {};
+            hand.forEach(tile => {
+                handCounts[tile] = (handCounts[tile] || 0) + 1;
+            });
+            let jokerCount = handCounts['joker'] || 0;
+            delete handCounts['joker'];
+
+            if (jokerCount >= 2) {
+                for (let tile in handCounts) {
+                    if (handCounts[tile] >= 2) {
+                        let tempHand = [...hand];
+                        if (canWin(fixed, tempHand.concat('joker'), jokers)) {
+                            return { isAny: true, tiles: new Set() };
+                        }
+                    }
+                }
+            }
+
+            suits.forEach(suit => {
+                for (let i = 1; i <= 9; i++) {
+                    let testTile = `${i}${suit}`;
+                    if (canWin(fixed, [...hand, testTile], jokers)) {
+                        tingTiles.add(testTile);
+                    }
+                }
+            });
+            honors.forEach(honor => {
+                if (canWin(fixed, [...hand, honor], jokers)) {
+                    tingTiles.add(honor);
+                }
+            });
+            if (canWin(fixed, [...hand, 'joker'], jokers)) {
+                tingTiles.add('joker');
+            }
+
+            return { isAny: false, tiles: tingTiles };
+        }
+
+        function canWin(fixed, hand, jokers) {
+            let fixedCounts = {};
+            fixed.forEach(tile => {
+                fixedCounts[tile] = (fixedCounts[tile] || 0) + 1;
+            });
+
+            let handCounts = {};
+            hand.forEach(tile => {
+                handCounts[tile] = (handCounts[tile] || 0) + 1;
+            });
+
+            let jokerCount = handCounts['joker'] || 0;
+            delete handCounts['joker'];
+
+            for (let tile in fixedCounts) {
+                if (fixedCounts[tile] !== 3 && fixedCounts[tile] !== 4) return false;
+            }
+
+            let totalTiles = Object.values(fixedCounts).reduce((sum, c) => sum + c, 0) + 
+                            Object.values(handCounts).reduce((sum, c) => sum + c, 0) + jokerCount;
+            if (totalTiles !== 17) return false;
+
+            let fixedGroups = Object.keys(fixedCounts).length;
+            if (fixedGroups > 5) return false;
+
+            if (fixedGroups === 0 && checkSevenPairs(handCounts, jokerCount)) return true;
+
+            return checkStandardWin(handCounts, jokerCount, fixedGroups);
+        }
+
+        function checkSevenPairs(counts, jokers) {
+            let pairs = 0;
+            let singles = 0;
+            for (let tile in counts) {
+                if (counts[tile] >= 2) pairs += Math.floor(counts[tile] / 2);
+                if (counts[tile] % 2 === 1) singles++;
+            }
+            return pairs + Math.floor(jokers / 2) >= 7 && singles <= jokers % 2;
+        }
+
+        function checkStandardWin(counts, jokers, fixedGroups) {
+            let totalTiles = Object.values(counts).reduce((sum, c) => sum + c, 0);
+
+            if (fixedGroups === 5) {
+                if (totalTiles + jokers === 2) {
+                    for (let tile in counts) {
+                        if (counts[tile] === 2 || (counts[tile] === 1 && jokers >= 1)) {
+                            return true;
+                        }
+                    }
+                    if (jokers >= 2) return true;
+                }
+                return false;
+            }
+
+            if (totalTiles + jokers < 5) return false;
+
+            if (jokers >= 2) {
+                for (let pairTile in counts) {
+                    if (counts[pairTile] >= 2) {
+                        let tempCounts = { ...counts };
+                        tempCounts[pairTile] -= 2;
+                        if (tempCounts[pairTile] === 0) delete tempCounts[pairTile];
+                        if (decompose(tempCounts, jokers, fixedGroups)) return true;
+                    }
+                }
+                if (jokers >= 2 && totalTiles + jokers - 2 >= 3 * (5 - fixedGroups)) return true;
+            }
+
+            for (let pairTile in counts) {
+                if (counts[pairTile] >= 2 || (counts[pairTile] === 1 && jokers >= 1)) {
+                    let tempCounts = { ...counts };
+                    let tempJokers = jokers;
+                    if (tempCounts[pairTile] >= 2) {
+                        tempCounts[pairTile] -= 2;
+                    } else {
+                        tempCounts[pairTile]--;
+                        tempJokers--;
+                    }
+                    if (tempCounts[pairTile] === 0) delete tempCounts[pairTile];
+
+                    if (decompose(tempCounts, tempJokers, fixedGroups)) return true;
+                }
+            }
+            return false;
+        }
+
+        function decompose(counts, jokers, fixedGroups) {
+            let suits = { 'w': {}, 't': {}, 'b': {} };
+            let honors = {};
+
+            for (let tile in counts) {
+                if (tile.endsWith('w')) suits['w'][tile[0]] = counts[tile];
+                else if (tile.endsWith('t')) suits['t'][tile[0]] = counts[tile];
+                else if (tile.endsWith('b')) suits['b'][tile[0]] = counts[tile];
+                else honors[tile] = counts[tile];
+            }
+
+            let remainingGroups = 5 - fixedGroups;
+            if (remainingGroups < 0) return false;
+
+            let totalTiles = Object.values(counts).reduce((sum, c) => sum + c, 0);
+            if (totalTiles + jokers < 3 * remainingGroups) return false;
+
+            for (let suit in suits) {
+                let suitResult = decomposeSuit(suits[suit], jokers, remainingGroups);
+                if (!suitResult.success) return false;
+                jokers -= suitResult.jokersUsed;
+                remainingGroups -= suitResult.groups;
+            }
+
+            for (let honor in honors) {
+                let count = honors[honor];
+                let groups = Math.floor(count / 3);
+                let remainder = count % 3;
+                remainingGroups -= groups;
+                if (remainder > 0) {
+                    if (jokers >= 3 - remainder) {
+                        jokers -= 3 - remainder;
+                        remainingGroups--;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+
+            while (jokers >= 3 && remainingGroups > 0) {
+                jokers -= 3;
+                remainingGroups--;
+            }
+
+            return remainingGroups <= 0 && jokers >= 0;
+        }
+
+        function decomposeSuit(suitCounts, jokers, remainingGroups) {
+            let tiles = Array(9).fill(0);
+            for (let i = 1; i <= 9; i++) {
+                tiles[i-1] = suitCounts[i] || 0;
+            }
+
+            let groups = 0;
+            let jokersUsed = 0;
+            let i = 0;
+            while (i < 9) {
+                if (tiles[i] === 0) {
+                    i++;
+                    continue;
+                }
+                if (tiles[i] >= 3) {
+                    tiles[i] -= 3;
+                    groups++;
+                    continue;
+                }
+                if (i <= 6 && tiles[i] > 0 && tiles[i+1] > 0 && tiles[i+2] > 0) {
+                    tiles[i]--;
+                    tiles[i+1]--;
+                    tiles[i+2]--;
+                    groups++;
+                    continue;
+                }
+                if (jokers > 0) {
+                    if (tiles[i] === 2 && jokers >= 1) {
+                        tiles[i] -= 2;
+                        jokers--;
+                        jokersUsed++;
+                        groups++;
+                        continue;
+                    }
+                    if (i <= 7 && tiles[i] > 0 && tiles[i+1] > 0 && jokers >= 1) {
+                        tiles[i]--;
+                        tiles[i+1]--;
+                        jokers--;
+                        jokersUsed++;
+                        groups++;
+                        continue;
+                    }
+                    if (i <= 6 && tiles[i] > 0 && jokers >= 2) {
+                        tiles[i]--;
+                        jokers -= 2;
+                        jokersUsed += 2;
+                        groups++;
+                        continue;
+                    }
+                    if (tiles[i] === 1 && jokers >= 2) {
+                        tiles[i]--;
+                        jokers -= 2;
+                        jokersUsed += 2;
+                        groups++;
+                        continue;
+                    }
+                }
+                break;
+            }
+
+            let remainingTiles = tiles.reduce((sum, c) => sum + c, 0);
+            if (remainingTiles > jokers) return { success: false };
+            jokersUsed += remainingTiles;
+            groups += Math.floor((remainingTiles + jokers) / 3);
+
+            return { success: true, groups, jokersUsed };
+        }
+
+        // 初始化
+        updateFixedTiles();
+        updateHandTiles();
+    </script>
+</body>
+</html>
